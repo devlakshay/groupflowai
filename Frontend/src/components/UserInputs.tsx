@@ -22,6 +22,12 @@ import {
   Select,
   Box,
   Heading,
+  Text,
+  Wrap,
+  WrapItem,
+  TagLabel,
+  TagCloseButton,
+  Tag,
 } from "@chakra-ui/react";
 
 interface Teammate {
