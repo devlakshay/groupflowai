@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import {
-  Box,
   Radio,
   RadioGroup,
   Stack,
   Input,
   Button,
   Textarea,
+  Heading,
 } from "@chakra-ui/react";
 
 const ProjectInput: React.FC = () => {
@@ -32,6 +32,9 @@ const ProjectInput: React.FC = () => {
 
   return (
     <>
+      <Heading size="md" marginY={2}>
+        Project Details
+      </Heading>
       <RadioGroup onChange={handleOptionChange} value={selectedOption}>
         <Stack direction="row">
           <Radio value="text">Text</Radio>
