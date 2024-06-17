@@ -1,7 +1,18 @@
-import React from "react";
+import { Box } from "@chakra-ui/react";
+import React, { useState } from "react";
+import Chatbot from "./ChatScreen";
+
+interface Chat {
+  id: number;
+  text: string;
+  sender: "bot" | "user";
+  timestamp: string;
+}
 
 const ChatBot = () => {
-  return <div>ChatBot</div>;
+  const [chats, setChats] = useState<Chat[]>([]);
+
+  return <Chatbot />;
 };
 
 export default ChatBot;
