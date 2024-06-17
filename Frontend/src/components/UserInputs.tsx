@@ -35,12 +35,25 @@ interface Teammate {
   strengths: string[];
 }
 
-const Teammates: React.FC = () => {
+const Teammates = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [teammates, setTeammates] = useState<Teammate[]>([]);
   const [username, setUsername] = useState("");
   const [strengths, setStrengths] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState<number | null>(null);
+  const [inputValue, setInputValue] = useState("");
+
+  const handleAddSkill = () => {
+    if (inputValue === "Other") return;
+    if (inputValue && !strengths.includes(inputValue)) {
+      setStrengths([...strengths, inputValue]);
+      setInputValue("");
+    }
+  };
+
+  const handleRemoveSkill = (strengthToRemove: String) => {
+    setStrengths(strengths.filter((strength) => strength !== strengthToRemove));
+  };
 
   const handleAddTeammate = () => {
     if (isEditing !== null) {
@@ -103,7 +116,15 @@ const Teammates: React.FC = () => {
         </Table>
       </TableContainer>
 
-      <Button onClick={onOpen} marginTop={3}>
+      <Button
+        onClick={() => {
+          setIsEditing(null);
+          setUsername("");
+          setStrengths([]);
+          onOpen();
+        }}
+        marginTop={3}
+      >
         Add Teammate
       </Button>
 
@@ -125,18 +146,69 @@ const Teammates: React.FC = () => {
             </FormControl>
             <FormControl mb={4}>
               <FormLabel>Strengths</FormLabel>
-              <Select
-                placeholder="Select strength"
-                value={strengths}
-                onChange={(e) => setStrengths([e.target.value])}
-                multiple
-              >
-                <option value="No Strength">No Strength</option>
-                <option value="Leadership">Leadership</option>
-                <option value="Teamwork">Teamwork</option>
-                <option value="Problem-solving">Problem-solving</option>
-                <option value="Custom">Custom</option>
-              </Select>
+
+              <Box width="400px" p="4" borderWidth="1px" borderRadius="lg">
+                {/* <Select
+                  placeholder="Enter Strength"
+                  value={inputValue}
+                  onChange={(event) => {
+                    setInputValue(event.target.value);
+                    console.log(inputValue);
+                    handleAddSkill();
+                  }}
+                  mb="4"
+                >
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="Other">Other</option>
+                </Select> */}
+                {/* {inputValue == "Other" ? (
+                  <>
+                    <Input
+                      placeholder="Enter Strength"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      mb="4"
+                    />
+
+                    <Button onClick={handleAddSkill} colorScheme="blue" mb="4">
+                      Add
+                    </Button>
+                  </>
+                ) : null} */}
+
+                <Input
+                  placeholder="Enter Strength"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  mb="4"
+                />
+
+                <Button onClick={handleAddSkill} colorScheme="blue" mb="4">
+                  Add
+                </Button>
+
+                <Wrap>
+                  {strengths.map((strength, index) => (
+                    <WrapItem key={index}>
+                      <Tag
+                        size="lg"
+                        borderRadius="full"
+                        variant="solid"
+                        colorScheme="blue"
+                      >
+                        <TagLabel>{strength}</TagLabel>
+                        <TagCloseButton
+                          onClick={() => handleRemoveSkill(strength)}
+                        />
+                      </Tag>
+                    </WrapItem>
+                  ))}
+                </Wrap>
+              </Box>
             </FormControl>
           </ModalBody>
           <ModalFooter>

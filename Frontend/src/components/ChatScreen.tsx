@@ -1,16 +1,15 @@
-import React, { useState } from "react";
 import {
-  Box,
-  VStack,
-  HStack,
-  Input,
-  IconButton,
-  Text,
   Avatar,
+  Box,
   Flex,
+  HStack,
+  IconButton,
+  Input,
+  Text,
+  VStack,
   useColorModeValue,
-  Button,
 } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
 
 interface Message {
