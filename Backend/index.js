@@ -1,13 +1,14 @@
-import 'dotenv/config'
+import "dotenv/config";
 import express from "express";
-// const express = require('express')
-const app = express()
-const port = process.env.PORT || 3000
+import validator from "validator";
+const app = express();
+app.use(express.json());
+const port = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+// Define your API endpoint for processing text data
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
