@@ -23,71 +23,58 @@ interface Message {
 }
 
 const Chatbot: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "Hello, Rahul how can I help you?",
-      sender: "bot",
-      timestamp: "10:00 AM",
-      avatar: "https://bit.ly/bot-avatar",
-    },
-    {
-      id: 2,
-      text: "I want to know that my reservation is confirmed or not",
-      sender: "user",
-      timestamp: "10:01 AM",
-    },
-    {
-      id: 3,
-      text: "Your reservation for one-day night stay on May 12th has been confirmed",
-      sender: "bot",
-      timestamp: "10:02 AM",
-      avatar: "https://bit.ly/bot-avatar",
-    },
-    {
-      id: 4,
-      text: "Would you also like to reserve a table at the restaurant?",
-      sender: "bot",
-      timestamp: "10:03 AM",
-      avatar: "https://bit.ly/bot-avatar",
-    },
-    {
-      id: 5,
-      text: "What times are available can you get to me",
-      sender: "user",
-      timestamp: "10:04 AM",
-    },
-    {
-      id: 6,
-      text: "You can choose any of the following times:",
-      sender: "bot",
-      timestamp: "10:05 AM",
-      avatar: "https://bit.ly/bot-avatar",
-    },
-    {
-      id: 7,
-      text: "March 4 6:00pm",
-      sender: "bot",
-      timestamp: "10:06 AM",
-      avatar: "https://bit.ly/bot-avatar",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const [input, setInput] = useState("");
 
-  const handleSendMessage = () => {
-    if (input.trim()) {
+  const handleSendMessage = async (messageText: string) => {
+    const newMessage: Message = {
+      id: messages.length + 1,
+      text: messageText,
+      sender: "user",
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setInput("");
+  };
+  const handleResponseMessage = async (userInput: string) => {
+    try {
+      const response = await fetch("http://localhost:4000/api/chatbot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text: userInput }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
+      const data = await response.json();
       const newMessage: Message = {
         id: messages.length + 1,
-        text: input,
-        sender: "user",
+        text: data.text,
+        sender: "bot",
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
       };
-      setMessages([...messages, newMessage]);
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
       setInput("");
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  };
+  const handleSendMessageAndReceiveResponse = async () => {
+    const messageText = input.trim();
+    if (messageText) {
+      handleSendMessage(messageText); // Send the user's message
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await handleResponseMessage(messageText); // Wait for the bot's response
+      setInput(""); // Optionally clear the input field after sending the message
     }
   };
 
@@ -167,7 +154,7 @@ const Chatbot: React.FC = () => {
           flex="1"
         />
         <IconButton
-          onClick={handleSendMessage}
+          onClick={handleSendMessageAndReceiveResponse}
           colorScheme="blue"
           aria-label="Send message"
           icon={<FaPaperPlane />}
