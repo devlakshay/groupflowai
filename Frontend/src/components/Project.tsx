@@ -2,9 +2,14 @@ import { Box, Button, Flex } from "@chakra-ui/react";
 import AdditionalDetailInput from "./AdditionalDetailInput";
 import ProjectInput from "./ProjectInput";
 import UserInputs from "./UserInputs";
+import useProjectQueryStore from "../store/useProjectQueryStore";
 
 const Project = () => {
-  const handleStartChat = () => {};
+  let ans = useProjectQueryStore((s) => s.projectQuery);
+
+  const handleStartChat = () => {
+    console.log(ans);
+  };
   return (
     <Box padding={5}>
       <ProjectInput />

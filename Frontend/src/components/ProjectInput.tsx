@@ -9,14 +9,17 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import useProjectQueryStore from "../store/useProjectQueryStore";
+import * as pdfjsLib from "pdfjs-dist";
 
-const ProjectInput: React.FC = () => {
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "/Users/lakshyagoel/Desktop/Projects/GroupFlowAI/Frontend/node_modules/pdfjs-dist/build/pdf.worker.mjs";
+
+const ProjectInput = () => {
   const projectDeatils = useProjectQueryStore(
     (s) => s.projectQuery.projectDeatils
   );
   const setProjectDeatils = useProjectQueryStore((s) => s.setProjectDeatils);
   const [selectedOption, setSelectedOption] = useState<string>("text");
-  // const [inputValue, setInputValue] = useState<string>("");
 
   const handleOptionChange = (value: string) => {
     setSelectedOption(value);
@@ -29,13 +32,34 @@ const ProjectInput: React.FC = () => {
     setProjectDeatils(event.target.value);
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setProjectDeatils(event.target.files[0].name);
+  const convertPdfToJson = async (arrayBuffer: ArrayBuffer) => {
+    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+    const pdf = await loadingTask.promise;
+
+    const numPages = pdf.numPages;
+    const pages = [];
+
+    for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      const textItems = textContent.items.map((item: any) => item.str);
+      pages.push({ pageNumber: pageNum, text: textItems.join(" ") });
     }
+
+    return pages;
   };
 
-  const handleSubmit = () => {};
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const arrayBuffer = await file.arrayBuffer();
+      const json = await convertPdfToJson(arrayBuffer);
+      console.log(JSON.parse(JSON.stringify(json)));
+      setProjectDeatils(JSON.stringify(json));
+    }
+  };
 
   return (
     <>
@@ -77,10 +101,6 @@ const ProjectInput: React.FC = () => {
           onChange={handleInputChange}
         />
       )}
-
-      {/* <Button mt={4} colorScheme="blue" onClick={() => console.log(inputValue)}>
-        Submit
-      </Button> */}
     </>
   );
 };
