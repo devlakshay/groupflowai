@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Table,
@@ -29,15 +29,18 @@ import {
   TagCloseButton,
   Tag,
 } from "@chakra-ui/react";
+import useProjectQueryStore from "../store/useProjectQueryStore";
 
-interface Teammate {
+export interface Teammate {
   username: string;
   strengths: string[];
 }
 
 const Teammates = () => {
+  const teammates = useProjectQueryStore((s) => s.projectQuery.teammates);
+  const setTeammates = useProjectQueryStore((s) => s.setTeammates);
+  // const [teammates, setTeammates] = useState<Teammate[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [teammates, setTeammates] = useState<Teammate[]>([]);
   const [username, setUsername] = useState("");
   const [strengths, setStrengths] = useState<string[]>([]);
   const [isEditing, setIsEditing] = useState<number | null>(null);

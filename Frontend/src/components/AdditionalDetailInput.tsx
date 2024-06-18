@@ -1,14 +1,22 @@
 import { Box, Button, Heading, Textarea } from "@chakra-ui/react";
 import ProjectInput from "./ProjectInput";
 import { useState } from "react";
+import useProjectQueryStore from "../store/useProjectQueryStore";
 
 const AdditionalDetailInput = () => {
-  const [inputValue, setInputValue] = useState<string>("");
+  // const [inputValue, setInputValue] = useState<string>("");
+
+  const additionalDetails = useProjectQueryStore(
+    (s) => s.projectQuery.additionalDetails
+  );
+  const setAdditionalDetails = useProjectQueryStore(
+    (s) => s.setAdditionalDetails
+  );
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setInputValue(event.target.value);
+    setAdditionalDetails(event.target.value);
   };
 
   return (
@@ -18,13 +26,13 @@ const AdditionalDetailInput = () => {
       <Textarea
         mt={2}
         placeholder="Enter text"
-        value={inputValue}
+        value={additionalDetails}
         onChange={handleInputChange}
       />
 
-      <Button mt={4} colorScheme="blue" onClick={() => console.log(inputValue)}>
+      {/* <Button mt={4} colorScheme="blue" onClick={() => console.log(inputValue)}>
         Submit
-      </Button>
+      </Button> */}
     </Box>
   );
 };
