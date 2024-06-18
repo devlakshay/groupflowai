@@ -22,8 +22,8 @@ encoder = SentenceTransformer("all-MiniLM-L6-v2")
 # client = QdrantClient(url="http://localhost:6333")
 
 client = QdrantClient(
-    url="https://71f17288-a57d-4c3c-91d8-18c2a98f913d.europe-west3-0.gcp.cloud.qdrant.io:6333",
-    api_key="4rbzTFpMszvULZNaUBMXo89FHDoqZdnxy2dNeypwF_YQPI7npgg1aA",
+    url="https://1bfd6e70-7b34-4d4f-9a49-48caf38af0a2.us-east4-0.gcp.cloud.qdrant.io:6333",
+    api_key="ikLKJDZ2Bpv7kD9E6MtyTxwqJ0ChSlyCtpBLMQYZ9r9FUwLcf5kCgQ",
 )
 
 
@@ -60,7 +60,7 @@ def handle_data():
 
     try:
         client.recreate_collection(
-            collection_name="FLOW GROUP AI",
+            collection_name="Cluster0",
             vectors_config=models.VectorParams(
                 size=len(point.vector),  # Vector size is defined by used model
                 distance=models.Distance.COSINE,
@@ -68,7 +68,7 @@ def handle_data():
         )
 
         response = client.upsert(
-            collection_name="FLOW GROUP AI",
+            collection_name="Cluster0",
             points=[point],
         )
 
