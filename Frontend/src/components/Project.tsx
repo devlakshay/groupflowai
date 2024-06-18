@@ -3,12 +3,25 @@ import AdditionalDetailInput from "./AdditionalDetailInput";
 import ProjectInput from "./ProjectInput";
 import UserInputs from "./UserInputs";
 import useProjectQueryStore from "../store/useProjectQueryStore";
+import axios from "axios";
 
 const Project = () => {
-  let ans = useProjectQueryStore((s) => s.projectQuery);
-
-  const handleStartChat = () => {
-    console.log(ans);
+  const projetQuery = useProjectQueryStore((s) => s.projectQuery);
+  const handleStartChat = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000/api/add-point",
+        projetQuery,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   return (
     <Box padding={5}>

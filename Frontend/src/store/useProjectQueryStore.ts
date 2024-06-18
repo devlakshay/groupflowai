@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { Teammate } from "../components/UserInputs";
 
-interface ProjectQuery {
+export interface ProjectQuery {
   projectDeatils: string;
   additionalDetails?: string;
   teammates: Teammate[];
