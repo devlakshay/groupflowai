@@ -8,27 +8,34 @@ import {
   Textarea,
   Heading,
 } from "@chakra-ui/react";
+import useProjectQueryStore from "../store/useProjectQueryStore";
 
 const ProjectInput: React.FC = () => {
+  const projectDeatils = useProjectQueryStore(
+    (s) => s.projectQuery.projectDeatils
+  );
+  const setProjectDeatils = useProjectQueryStore((s) => s.setProjectDeatils);
   const [selectedOption, setSelectedOption] = useState<string>("text");
-  const [inputValue, setInputValue] = useState<string>("");
+  // const [inputValue, setInputValue] = useState<string>("");
 
   const handleOptionChange = (value: string) => {
     setSelectedOption(value);
-    setInputValue("");
+    setProjectDeatils("");
   };
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setInputValue(event.target.value);
+    setProjectDeatils(event.target.value);
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      setInputValue(event.target.files[0].name);
+      setProjectDeatils(event.target.files[0].name);
     }
   };
+
+  const handleSubmit = () => {};
 
   return (
     <>
@@ -47,7 +54,7 @@ const ProjectInput: React.FC = () => {
         <Textarea
           mt={4}
           placeholder="Enter text"
-          value={inputValue}
+          value={projectDeatils}
           onChange={handleInputChange}
         />
       )}
@@ -66,14 +73,14 @@ const ProjectInput: React.FC = () => {
         <Input
           mt={4}
           placeholder="Enter link"
-          value={inputValue}
+          value={projectDeatils}
           onChange={handleInputChange}
         />
       )}
 
-      <Button mt={4} colorScheme="blue" onClick={() => console.log(inputValue)}>
+      {/* <Button mt={4} colorScheme="blue" onClick={() => console.log(inputValue)}>
         Submit
-      </Button>
+      </Button> */}
     </>
   );
 };
