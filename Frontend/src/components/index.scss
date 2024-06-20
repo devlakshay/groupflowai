@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Recursive:wght@300..1000&display=swap");
+.project {
+  font-family: "Playfair Display", serif;
+  font-weight: 500;
+  font-size: 4rem;
+  color: #000;
+  text-transform: capitalize;
+  text-align: center;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  &:hover {
+    color: #ff00db;
+    text-shadow: 0 0 10px #ff00db, 0 0 20px #ff00db, 0 0 30px #ff00db,
+      0 0 40px #ff00db, 0 0 70px #ff00db, 0 0 80px #ff00db, 0 0 100px #ff00db,
+      0 0 150px #ff00db;
+  }
+  &:not(:hover) {
+    animation: pulse 15s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    text-shadow: 0 0 10px #ff00db, 0 0 20px #ff00db, 0 0 30px #ff00db,
+      0 0 40px #ff00db, 0 0 70px #ff00db, 0 0 80px #ff00db, 0 0 100px #ff00db,
+      0 0 150px #ff00db;
+  }
+  25% {
+    text-shadow: 0 0 10px #ff00db, 0 0 20px #ff00db, 0 0 30px #ff00db,
+      0 0 40px #ff00db, 0 0 70px #ff00db, 0 0 80px #ff00db, 0 0 100px #47ff00,
+      0 0 150px #47ff00;
+  }
+  50% {
+    text-shadow: 0 0 10px #ff00db, 0 0 20px #ff00db, 0 0 30px #ff00db,
+      0 0 40px #ff00db, 0 0 70px #ff00db, 0 0 80px #47ff00, 0 0 100px #47ff00,
+      0 0 150px #47ff00;
+  }
+  75% {
+    text-shadow: 0 0 10px #ff00db, 0 0 20px #ff00db, 0 0 30px #ff00db,
+      0 0 40px #ff00db, 0 0 70px #47ff00, 0 0 80px #47ff00, 0 0 100px #47ff00,
+      0 0 150px #47ff00;
+  }
+  100% {
+    text-shadow: 0 0 10px #ff00db, 0 0 20px #ff00db, 0 0 30px #ff00db,
+      0 0 40px #ff00db, 0 0 70px #47ff00, 0 0 80px #47ff00, 0 0 100px #47ff00,
+      0 0 150px #47ff00;
+  }
+}
