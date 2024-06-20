@@ -6,9 +6,7 @@ const Navbar = () => {
   return (
     <HStack justifyContent={"space-between"}>
       <Box boxSize={20}>
-        <Image src="https://static.wixstatic.com/media/977dce_69967a030adc4ee78c0c90c1cd9e2b32~mv2.png" />
-        {/* <HStack> */}
-        {/* </HStack> */}
+        <Image src="https://static.wixstatic.com/media/977dce_eaf439279def4538a53230ab7726d14e~mv2.png" />
       </Box>
       <Heading>Group Flow AI</Heading>
       <ColorModeSwitch />
