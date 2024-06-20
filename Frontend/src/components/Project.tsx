@@ -7,11 +7,33 @@ import axios from "axios";
 
 const Project = () => {
   const projetQuery = useProjectQueryStore((s) => s.projectQuery);
+
   const handleStartChat = async () => {
+    let teamMessage = projetQuery.teammates.reduce(
+      (acc, item) =>
+        `${acc} ${item.username} who has strengths like ${item.strengths.join(
+          ", "
+        )} and `,
+      ""
+    );
+
+    const data = {
+      content: `Hey model this is our Project details ${projetQuery.projectDeatils} and our idea is ${projetQuery.additionalDetails}. Our team have ${teamMessage}`,
+      metadata: {
+        loc: {
+          lines: {
+            from: 1,
+            to: 1,
+          },
+        },
+      },
+    };
+
+    console.log(data);
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/api/add-point",
-        projetQuery,
+        data,
         {
           headers: {
             "Content-Type": "application/json",
