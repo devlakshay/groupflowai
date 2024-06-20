@@ -60,7 +60,7 @@ def handle_data():
 
     try:
         client.recreate_collection(
-            collection_name="Cluster0",
+            collection_name="Cluster1",
             vectors_config=models.VectorParams(
                 size=len(point.vector),  # Vector size is defined by used model
                 distance=models.Distance.COSINE,
@@ -68,7 +68,7 @@ def handle_data():
         )
 
         response = client.upsert(
-            collection_name="Cluster0",
+            collection_name="Cluster1",
             points=[point],
         )
 
