@@ -9,7 +9,7 @@ import {
   VStack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaPaperPlane } from "react-icons/fa";
 
 interface Message {
@@ -26,6 +26,11 @@ const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   const [input, setInput] = useState("");
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSendMessage = async (messageText: string) => {
     const newMessage: Message = {
@@ -145,6 +150,7 @@ const Chatbot: React.FC = () => {
             )}
           </Flex>
         ))}
+        <div ref={bottomRef}></div>
       </VStack>
       <HStack p={4} borderTop="1px" borderColor="gray.200">
         <Input
