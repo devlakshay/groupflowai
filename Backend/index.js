@@ -1,6 +1,5 @@
 import "dotenv/config";
 import express from "express";
-import validator from "validator";
 import cors from "cors";
 const app = express();
 app.use(cors());
@@ -46,13 +45,12 @@ async function query(data) {
 
 app.post("/api/chatbot", (req, res) => {
   const { text } = req.body;
-  let response;
   query({ question: text }).then((response) => {
     let { text } = response;
     res.json({ text });
   });
 });
-// Define your API endpoint for processing text data
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
