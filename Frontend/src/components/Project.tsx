@@ -18,7 +18,7 @@ const Project = () => {
     );
 
     const data = {
-      content: `Hey model this is our Project details ${projetQuery.projectDeatils} and our idea is ${projetQuery.additionalDetails}. Our team have ${teamMessage}`,
+      content: `The project details are as follows :  ${projetQuery.projectDeatils}. User is  thinking of approaching the project like this :  ${projetQuery.additionalDetails}. The Team Including The User : ${teamMessage}`,
       metadata: {
         loc: {
           lines: {
