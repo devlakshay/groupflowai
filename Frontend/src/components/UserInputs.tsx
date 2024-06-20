@@ -86,7 +86,7 @@ const Teammates = () => {
 
   return (
     <Box marginTop={3}>
-      <Heading size="md">User Strengths</Heading>
+      <Heading size="md">Teammates</Heading>
       <TableContainer mt={4}>
         <Table variant="simple">
           <Thead>
