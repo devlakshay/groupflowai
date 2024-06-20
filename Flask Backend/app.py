@@ -1,36 +1,26 @@
-# pip3 instal Flask sentence-transformers qdrant-client
-
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
 from qdrant_client import models, QdrantClient
-from sentence_transformers import SentenceTransformer
-
-import time
-import json
-
-
-def current_milli_time():
-    return round(time.time() * 1000)
-
+import openai
 
 app = Flask(__name__)
 CORS(app)
 
-encoder = SentenceTransformer("all-MiniLM-L6-v2")
-
-# client = QdrantClient(url="http://localhost:6333")
-
+QDRANT_URL = "https://71f17288-a57d-4c3c-91d8-18c2a98f913d.europe-west3-0.gcp.cloud.qdrant.io:6333"  # LAKSHYA
+QDRANT_API = "4rbzTFpMszvULZNaUBMXo89FHDoqZdnxy2dNeypwF_YQPI7npgg1aA"  # LAKSHYA
+COLLECTION_NAME = "Cluster0"
 client = QdrantClient(
-    url="https://1bfd6e70-7b34-4d4f-9a49-48caf38af0a2.us-east4-0.gcp.cloud.qdrant.io:6333",
-    api_key="ikLKJDZ2Bpv7kD9E6MtyTxwqJ0ChSlyCtpBLMQYZ9r9FUwLcf5kCgQ",
+    url=QDRANT_URL,
+    api_key=QDRANT_API,
 )
 
+OPENAI_KEY = "sk-proj-JTJuiJ4PynVT8oBapwWNT3BlbkFJdbzrgvtnoMh8eRbcTgvR"  # YASH
+openai.api_key = OPENAI_KEY
 
+
+# ROUTES
 @app.route("/api/add-point", methods=["POST"])
 def handle_data():
-
-    # Check if content type is JSON
 
     if not request.is_json:
         return (
@@ -38,47 +28,59 @@ def handle_data():
             400,
         )
 
-    # Get the JSON data
     data = request.get_json()
 
-    # print(data)
-
-    # Process the data (example: print it)
-    print(f"Received JSON data: {data}")
+    vector = (
+        openai.embeddings.create(input=data["content"], model="text-embedding-ada-002")
+        .data[0]
+        .embedding
+    )
 
     point = ""
+
     try:
         point = models.PointStruct(
-            id=current_milli_time(),
-            vector=encoder.encode(json.dumps(data)).tolist(),
+            id=1,
+            vector=vector,
             payload=data,
         )
 
-        # print(point.vector)
     except Exception as e:
         print("point error", e)
 
     try:
         client.recreate_collection(
-            collection_name="Cluster1",
+            collection_name=COLLECTION_NAME,
             vectors_config=models.VectorParams(
-                size=len(point.vector),  # Vector size is defined by used model
+                size=len(point.vector),
                 distance=models.Distance.COSINE,
             ),
         )
 
         response = client.upsert(
-            collection_name="Cluster1",
+            collection_name=COLLECTION_NAME,
             points=[point],
         )
 
         print(response)
     except Exception as e:
         print("res error", e)
-    # print(response)
 
-    # Return a success response
     return jsonify({"message": "Data received successfully!"}), 201
+
+
+@app.route("/api/retrieve-point", methods=["GET"])
+def get_data():
+    res = ""
+    try:
+        res = client.retrieve(
+            collection_name=COLLECTION_NAME,
+            ids=[1],
+        )
+    except Exception as e:
+        print("Retrieve error", e)
+
+    return res[0].payload["content"], 200
 
 
 if __name__ == "__main__":
