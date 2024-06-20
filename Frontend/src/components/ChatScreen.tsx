@@ -5,6 +5,7 @@ import {
   HStack,
   IconButton,
   Input,
+  Spinner,
   Text,
   VStack,
   useColorModeValue,
@@ -24,9 +25,9 @@ interface Message {
 
 const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-
   const [input, setInput] = useState("");
   const bottomRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -68,6 +69,7 @@ const Chatbot: React.FC = () => {
         }),
       };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
+      setIsLoading(false);
       setInput("");
     } catch (error) {
       console.error("Error sending message:", error);
@@ -76,6 +78,7 @@ const Chatbot: React.FC = () => {
   const handleSendMessageAndReceiveResponse = async () => {
     const messageText = input.trim();
     if (messageText) {
+      setIsLoading(true);
       handleSendMessage(messageText); // Send the user's message
       await new Promise((resolve) => setTimeout(resolve, 1000));
       await handleResponseMessage(messageText); // Wait for the bot's response
@@ -88,6 +91,41 @@ const Chatbot: React.FC = () => {
   const userBgColor = useColorModeValue("blue.100", "blue.700");
   const userTextColor = useColorModeValue("black", "white");
   const timestampColor = useColorModeValue("gray.800", "gray.300");
+
+  function formatBoldText(text: string) {
+    return text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+  }
+
+  const covert_text_to_html = (inputText: string) => {
+    const lines = inputText.split("\n");
+
+    return lines.map((line, index) => {
+      if (line.startsWith("- ")) {
+        // Unordered list
+        const items = line.split(/(?=-\s)/g);
+        return (
+          <ul key={index}>
+            {items.map((item, idx) => (
+              <li
+                key={idx}
+                dangerouslySetInnerHTML={{
+                  __html: formatBoldText(item.replace("- ", "")),
+                }}
+              />
+            ))}
+          </ul>
+        );
+      } else {
+        // Regular line with potential bold text
+        return (
+          <p
+            key={index}
+            dangerouslySetInnerHTML={{ __html: formatBoldText(line) }}
+          />
+        );
+      }
+    });
+  };
 
   return (
     <Flex
@@ -118,7 +156,7 @@ const Chatbot: React.FC = () => {
                 p={3}
                 wordBreak="break-word"
               >
-                {message.text}
+                {covert_text_to_html(message.text)}
                 <Text
                   fontSize="xs"
                   color={timestampColor}
@@ -150,12 +188,20 @@ const Chatbot: React.FC = () => {
             )}
           </Flex>
         ))}
+        {isLoading && (
+          <Box alignSelf={"flex-start"}>
+            <Spinner />
+          </Box>
+        )}
         <div ref={bottomRef}></div>
       </VStack>
       <HStack p={4} borderTop="1px" borderColor="gray.200">
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") handleSendMessageAndReceiveResponse();
+          }}
           placeholder="Type a message"
           flex="1"
         />
