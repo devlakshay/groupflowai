@@ -1,10 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from qdrant_client import models, QdrantClient
+# from dotenv import load_dotenv
 import openai
 
 app = Flask(__name__)
+# load_dotenv()
 CORS(app)
+
 
 QDRANT_URL = "https://71f17288-a57d-4c3c-91d8-18c2a98f913d.europe-west3-0.gcp.cloud.qdrant.io:6333"  # LAKSHYA
 QDRANT_API = "4rbzTFpMszvULZNaUBMXo89FHDoqZdnxy2dNeypwF_YQPI7npgg1aA"  # LAKSHYA
