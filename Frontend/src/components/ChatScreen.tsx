@@ -97,6 +97,9 @@ const Chatbot: React.FC = () => {
   }
 
   const covert_text_to_html = (inputText: string) => {
+    // console.log(inputText);
+
+    if (!inputText) inputText = "";
     const lines = inputText.split("\n");
 
     return lines.map((line, index) => {
