@@ -1,4 +1,4 @@
-# Welcome to GroupFlow.AI
+# Welcome to GroupFlow.AI!
 
 This is a chatbot webapp that helps you with all your inital work distribution for any sort of project be it educational , professional etc.
 
