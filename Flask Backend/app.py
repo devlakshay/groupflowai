@@ -1,20 +1,27 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from qdrant_client import models, QdrantClient
+from dotenv import load_dotenv
 import openai
+import os
 
 app = Flask(__name__)
+load_dotenv()
 CORS(app)
 
-QDRANT_URL = "https://71f17288-a57d-4c3c-91d8-18c2a98f913d.europe-west3-0.gcp.cloud.qdrant.io:6333"  # LAKSHYA
-QDRANT_API = "4rbzTFpMszvULZNaUBMXo89FHDoqZdnxy2dNeypwF_YQPI7npgg1aA"  # LAKSHYA
+api_key = os.getenv("Lakshay_Qdrant_API")
+url_qdrant = os.getenv("Lakshay_Qdrant_URL")
+openai_key = os.getenv("Yash_OpenAI_API") # Edit this for your own API Keys.
+
+QDRANT_URL = url_qdrant  # LAKSHYA
+QDRANT_API = api_key  # LAKSHYA
 COLLECTION_NAME = "Cluster0"
 client = QdrantClient(
     url=QDRANT_URL,
     api_key=QDRANT_API,
 )
 
-OPENAI_KEY = "sk-proj-JTJuiJ4PynVT8oBapwWNT3BlbkFJdbzrgvtnoMh8eRbcTgvR"  # YASH
+OPENAI_KEY = openai_key  # YASH
 openai.api_key = OPENAI_KEY
 
 
